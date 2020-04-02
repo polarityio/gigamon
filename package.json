@@ -1,0 +1,11 @@
+{
+    "main": "./integration.js",
+    "name": "Gigamon",
+    "version": "3.0.2-beta",
+    "private": true,
+    "dependencies": {
+      "request": "^2.88.0",
+      "async": "^3.1.0",
+      "lodash": "^4.17.15"
+    }
+  }
