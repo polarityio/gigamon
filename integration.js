@@ -52,33 +52,8 @@ function startup(logger) {
     defaults.rejectUnauthorized = config.request.rejectUnauthorized;
   }
 
+  requestWithDefaults.json = true;
   requestWithDefaults = request.defaults(defaults);
-}
-
-function _setupRegexBlacklists(options) {
-  if (options.domainBlacklistRegex !== previousDomainRegexAsString && options.domainBlacklistRegex.length === 0) {
-    Logger.debug('Removing Domain Blacklist Regex Filtering');
-    previousDomainRegexAsString = '';
-    domainBlacklistRegex = null;
-  } else {
-    if (options.domainBlacklistRegex !== previousDomainRegexAsString) {
-      previousDomainRegexAsString = options.domainBlacklistRegex;
-      Logger.debug({ domainBlacklistRegex: previousDomainRegexAsString }, 'Modifying Domain Blacklist Regex');
-      domainBlacklistRegex = new RegExp(options.domainBlacklistRegex, 'i');
-    }
-  }
-
-  if (options.ipBlacklistRegex !== previousIpRegexAsString && options.ipBlacklistRegex.length === 0) {
-    Logger.debug('Removing IP Blacklist Regex Filtering');
-    previousIpRegexAsString = '';
-    ipBlacklistRegex = null;
-  } else {
-    if (options.ipBlacklistRegex !== previousIpRegexAsString) {
-      previousIpRegexAsString = options.ipBlacklistRegex;
-      Logger.debug({ ipBlacklistRegex: previousIpRegexAsString }, 'Modifying IP Blacklist Regex');
-      ipBlacklistRegex = new RegExp(options.ipBlacklistRegex, 'i');
-    }
-  }
 }
 
 function doLookup(entities, options, cb) {
@@ -98,8 +73,7 @@ function doLookup(entities, options, cb) {
           method: 'GET',
           headers: {
             Authorization: 'IBToken ' + options.apiKey
-          },
-          json: true
+          }
         };
 
         Logger.trace({ options: requestOptions }, 'Request URI');
@@ -125,8 +99,7 @@ function doLookup(entities, options, cb) {
           method: 'GET',
           headers: {
             Authorization: 'IBToken ' + options.apiKey
-          },
-          json: true
+          }
         };
 
         Logger.trace({ options: requestOptions }, 'Request URI');
@@ -175,6 +148,32 @@ function doLookup(entities, options, cb) {
   });
 }
 
+function _setupRegexBlacklists(options) {
+  if (options.domainBlacklistRegex !== previousDomainRegexAsString && options.domainBlacklistRegex.length === 0) {
+    Logger.debug('Removing Domain Blacklist Regex Filtering');
+    previousDomainRegexAsString = '';
+    domainBlacklistRegex = null;
+  } else {
+    if (options.domainBlacklistRegex !== previousDomainRegexAsString) {
+      previousDomainRegexAsString = options.domainBlacklistRegex;
+      Logger.debug({ domainBlacklistRegex: previousDomainRegexAsString }, 'Modifying Domain Blacklist Regex');
+      domainBlacklistRegex = new RegExp(options.domainBlacklistRegex, 'i');
+    }
+  }
+
+  if (options.ipBlacklistRegex !== previousIpRegexAsString && options.ipBlacklistRegex.length === 0) {
+    Logger.debug('Removing IP Blacklist Regex Filtering');
+    previousIpRegexAsString = '';
+    ipBlacklistRegex = null;
+  } else {
+    if (options.ipBlacklistRegex !== previousIpRegexAsString) {
+      previousIpRegexAsString = options.ipBlacklistRegex;
+      Logger.debug({ ipBlacklistRegex: previousIpRegexAsString }, 'Modifying IP Blacklist Regex');
+      ipBlacklistRegex = new RegExp(options.ipBlacklistRegex, 'i');
+    }
+  }
+}
+
 function doPDNSLookup(entity, options) {
   return function(done) {
     let requestOptions = {
@@ -182,8 +181,7 @@ function doPDNSLookup(entity, options) {
       method: 'GET',
       headers: {
         Authorization: 'IBToken ' + options.apiKey
-      },
-      json: true
+      }
     };
 
     request(requestOptions, (error, response, body) => {
@@ -207,8 +205,7 @@ function doDHCPLookup(entity, options) {
         method: 'GET',
         headers: {
           Authorization: 'IBToken ' + options.apiKey
-        },
-        json: true
+        }
       };
 
       request(requestOptions, (error, response, body) => {
@@ -233,8 +230,7 @@ function doSummaryLookup(entity, options) {
       method: 'GET',
       headers: {
         Authorization: 'IBToken ' + options.apiKey
-      },
-      json: true
+      }
     };
 
     request(requestOptions, (error, response, body) => {
