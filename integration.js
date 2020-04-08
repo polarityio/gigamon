@@ -49,7 +49,7 @@ function startup(logger) {
   }
 
   if (typeof config.request.rejectUnauthorized === 'boolean') {
-    requestOptions.rejectUnauthorized = config.request.rejectUnauthorized;
+    defaults.rejectUnauthorized = config.request.rejectUnauthorized;
   }
 
   requestWithDefaults = request.defaults(defaults);
