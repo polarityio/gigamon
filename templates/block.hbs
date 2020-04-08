@@ -60,47 +60,49 @@
         <h1 class="p-title">
             {{fa-icon "brain" fixedWidth=true}} Detection Details
         </h1>
-            <div class="mb-2">
-                {{#each details.detections as | detect| }}
+        <div class="mb-2">
+            {{#each details.detections as | detect| }}
+                {{#if (gt index 0)}}
+                    <hr>
+                {{/if}}
                 {{#if detect.status}}
-                <div>
-                    <span class="p-key">Detection Status: </span>
-                    <span class="p-value">{{detect.status}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Detection Status: </span>
+                        <span class="p-value">{{detect.status}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.resolution}}
-                <div>
-                    <span class="p-key">Resolution: </span>
-                    <span class="p-value">{{detect.resolution}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Resolution: </span>
+                        <span class="p-value">{{detect.resolution}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.resolution_comment}}
-                <div>
-                    <span class="p-key">Resolution Comment: </span>
-                    <span class="p-value">{{detect.resolution_comment}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Resolution Comment: </span>
+                        <span class="p-value">{{detect.resolution_comment}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.created}}
-                <div>
-                    <span class="p-key">Detection Created On: </span>
-                    <span class="p-value">{{detect.created}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Detection Created On: </span>
+                        <span class="p-value">{{detect.created}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.first_seen}}
-                <div>
-                    <span class="p-key">First Seen: </span>
-                    <span class="p-value">{{detect.first_seen}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">First Seen: </span>
+                        <span class="p-value">{{detect.first_seen}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.last_seen}}
-                <div>
-                    <span class="p-key">Last Seen: </span>
-                    <span class="p-value">{{detect.last_seen}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Last Seen: </span>
+                        <span class="p-value">{{detect.last_seen}}</span>
+                    </div>
                 {{/if}}
-                <hr>
-                {{/each}}
-            </div>
+            {{/each}}
+        </div>
     {{else}}
         <div class="alert alert-info mt-2" role="alert">
             No Detections Found
@@ -155,7 +157,10 @@
 
 {{#if (eq activeTab "pdns")}}
     {{#if details.pdns.passivedns}}
-        {{#each details.pdns.passivedns as | pdns | }}
+        {{#each details.pdns.passivedns as | pdns index | }}
+            {{#if (gt index 0)}}
+                <hr>
+            {{/if}}
             <h1 class="p-title">
                 {{fa-icon "question" fixedWidth=true}}  Passive DNS Information
             </h1>
@@ -195,7 +200,6 @@
                     <span class="p-value">{{pdns.source}}</span>
                 </div>
             {{/if}}
-            <hr>
         {{/each}}
     {{else}}
         <div class="alert alert-info mt-2" role="alert">
