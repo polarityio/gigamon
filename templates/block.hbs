@@ -4,7 +4,14 @@
         {{errorMessage}}
     </div>
 {{/if}}
-
+{{#if details.link}}
+    <div class="p-title">
+        <a class="p-link" href={{details.link}}>
+            View in Gigamon
+            {{fa-icon "external-link-square" class="external-link-icon"}}
+        </a>
+    </div>
+{{/if}}
 <ul class="nav nav-tabs">
     <li class="nav-item">
         <a {{action "changeTab" "detections"}} class="nav-link {{if (eq activeTab "detections") "active"}}" href="#">Detections</a>

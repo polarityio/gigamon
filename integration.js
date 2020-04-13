@@ -52,7 +52,7 @@ function startup(logger) {
     defaults.rejectUnauthorized = config.request.rejectUnauthorized;
   }
 
-  requestWithDefaults.json = true;
+  defaults.json = true;
   requestWithDefaults = request.defaults(defaults);
 }
 
@@ -138,7 +138,10 @@ function doLookup(entities, options, cb) {
           entity: result.entity,
           data: {
             summary: [],
-            details: result.body
+            details: { 
+              ...result.body,
+              link: `https://portal.icebrg.io/search?query=${result.entity.value}`
+            }
           }
         });
       }
