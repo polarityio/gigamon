@@ -187,7 +187,7 @@ function doPDNSLookup(entity, options) {
       }
     };
 
-    request(requestOptions, (error, response, body) => {
+    requestWithDefaults(requestOptions, (error, response, body) => {
       let processedResult = handleRestError(error, entity, response, body);
 
       if (processedResult.error) {
@@ -211,7 +211,7 @@ function doDHCPLookup(entity, options) {
         }
       };
 
-      request(requestOptions, (error, response, body) => {
+      requestWithDefaults(requestOptions, (error, response, body) => {
         let processedResult = handleRestError(error, entity, response, body);
 
         if (processedResult.error) {
@@ -236,7 +236,7 @@ function doSummaryLookup(entity, options) {
       }
     };
 
-    request(requestOptions, (error, response, body) => {
+    requestWithDefaults(requestOptions, (error, response, body) => {
       let processedResult = handleRestError(error, entity, response, body);
 
       if (processedResult.error) {
