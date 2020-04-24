@@ -4,7 +4,14 @@
         {{errorMessage}}
     </div>
 {{/if}}
-
+{{#if details.link}}
+    <div class="p-title">
+        <a class="p-link" href={{details.link}}>
+            View in Gigamon
+            {{fa-icon "external-link-square" class="external-link-icon"}}
+        </a>
+    </div>
+{{/if}}
 <ul class="nav nav-tabs">
     <li class="nav-item">
         <a {{action "changeTab" "detections"}} class="nav-link {{if (eq activeTab "detections") "active"}}" href="#">Detections</a>
@@ -60,47 +67,49 @@
         <h1 class="p-title">
             {{fa-icon "brain" fixedWidth=true}} Detection Details
         </h1>
-            <div class="mb-2">
-                {{#each details.detections as | detect| }}
+        <div class="mb-2">
+            {{#each details.detections as | detect| }}
+                {{#if (gt index 0)}}
+                    <hr>
+                {{/if}}
                 {{#if detect.status}}
-                <div>
-                    <span class="p-key">Detection Status: </span>
-                    <span class="p-value">{{detect.status}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Detection Status: </span>
+                        <span class="p-value">{{detect.status}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.resolution}}
-                <div>
-                    <span class="p-key">Resolution: </span>
-                    <span class="p-value">{{detect.resolution}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Resolution: </span>
+                        <span class="p-value">{{detect.resolution}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.resolution_comment}}
-                <div>
-                    <span class="p-key">Resolution Comment: </span>
-                    <span class="p-value">{{detect.resolution_comment}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Resolution Comment: </span>
+                        <span class="p-value">{{detect.resolution_comment}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.created}}
-                <div>
-                    <span class="p-key">Detection Created On: </span>
-                    <span class="p-value">{{detect.created}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Detection Created On: </span>
+                        <span class="p-value">{{detect.created}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.first_seen}}
-                <div>
-                    <span class="p-key">First Seen: </span>
-                    <span class="p-value">{{detect.first_seen}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">First Seen: </span>
+                        <span class="p-value">{{detect.first_seen}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.last_seen}}
-                <div>
-                    <span class="p-key">Last Seen: </span>
-                    <span class="p-value">{{detect.last_seen}}</span>
-                </div>
+                    <div>
+                        <span class="p-key">Last Seen: </span>
+                        <span class="p-value">{{detect.last_seen}}</span>
+                    </div>
                 {{/if}}
-                <hr>
-                {{/each}}
-            </div>
+            {{/each}}
+        </div>
     {{else}}
         <div class="alert alert-info mt-2" role="alert">
             No Detections Found
@@ -115,35 +124,35 @@
             Entity Summary Information is Loading
         </div>
     {{/if}}
-    {{#if details.summary}}
+    {{#if (and (and details.summary details.summary.summary) (or details.summary.summary.first_seen details.summary.summary.last_seen details.summary.summary.prevalence_count_internal details.summary.summary.tags))}}
         <h1 class="p-title">
             {{fa-icon "brain" fixedWidth=true}}  Entity Summary Details
         </h1>
-            <div class="mb-2">
-                {{#if details.summary.summary.first_seen}}
+        <div class="mb-2">
+            {{#if details.summary.summary.first_seen}}
                 <div>
                     <span class="p-key">First Seen: </span>
                     <span class="p-value">{{details.summary.summary.first_seen}}</span>
                 </div>
-                {{/if}}
-                {{#if details.summary.summary.last_seen}}
+            {{/if}}
+            {{#if details.summary.summary.last_seen}}
                 <div>
                     <span class="p-key">Last Seen: </span>
                     <span class="p-value">{{details.summary.summary.last_seen}}</span>
                 </div>
-                {{/if}}
-                {{#if details.summary.summary.prevalence_count_internal}}
-                    <div>
+            {{/if}}
+            {{#if details.summary.summary.prevalence_count_internal}}
+                <div>
                     <span class="p-key">Prevelance Count: </span>
                     <span class="p-value">{{details.summary.summary.prevalence_count_internal}}</span>
                 </div>
-                {{/if}}
-                {{#if details.summary.summary.tags}}
+            {{/if}}
+            {{#if details.summary.summary.tags}}
                 {{#each details.summary.summary.tags as | tag | }}
                     <span class="tag">{{tag}}</span>
                 {{/each}}
-                {{/if}}
-            </div>
+            {{/if}}
+        </div>
     {{else}}
         <div class="alert alert-info mt-2" role="alert">
             No Entity Summary Information Found
@@ -155,7 +164,10 @@
 
 {{#if (eq activeTab "pdns")}}
     {{#if details.pdns.passivedns}}
-        {{#each details.pdns.passivedns as | pdns | }}
+        {{#each details.pdns.passivedns as | pdns index | }}
+            {{#if (gt index 0)}}
+                <hr>
+            {{/if}}
             <h1 class="p-title">
                 {{fa-icon "question" fixedWidth=true}}  Passive DNS Information
             </h1>
@@ -195,7 +207,10 @@
                     <span class="p-value">{{pdns.source}}</span>
                 </div>
             {{/if}}
-            <hr>
         {{/each}}
+    {{else}}
+        <div class="alert alert-info mt-2" role="alert">
+            No Passive DNS Information Found
+        </div>
     {{/if}}
 {{/if}}
