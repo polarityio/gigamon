@@ -82,7 +82,7 @@ function doLookup(entities, options, cb) {
             sort_by: 'last_seen',
             sort_order: 'desc',
             include: 'rules',
-            account_uuid: options.account_uuid
+            ...(options.account_uuid && { account_uuid: options.account_uuid })
           }
         };
 
