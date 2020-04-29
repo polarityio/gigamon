@@ -279,13 +279,14 @@ function onDetails(lookupObject, options, cb) {
       }
       //store the results into the details object so we can access them in our template
       lookupObject.data.details.pdns = pdns;
-      lookupObject.data.details.dhcp = dhcp.entity_tracking_response.dhcp_mac_ip_intervals.map(
-        ({ interval_start, interval_end, ...dhcp }) => ({
+      lookupObject.data.details.dhcp =
+        dhcp &&
+        dhcp.entity_tracking_response &&
+        dhcp.entity_tracking_response.dhcp_mac_ip_intervals.map(({ interval_start, interval_end, ...dhcp }) => ({
           ...dhcp,
           ...(interval_start && { interval_start: moment(interval_start).format('MMM D YY, h:mm A') }),
           ...(interval_end && { interval_end: moment(interval_end).format('MMM D YY, h:mm A') })
-        })
-      );
+        }));
       lookupObject.data.details.summary = {
         ...summary,
         ...(summary.first_seen && { first_seen: moment(summary.first_seen).format('MMM D YY, h:mm A') }),
