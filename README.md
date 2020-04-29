@@ -12,6 +12,10 @@ To learn more about Gigamon, please visit the [official website](https://www.gig
 Gigamon API token. You can find your api token by navigating to your account. 
 
 
+### Gigamon Account UUID
+Account UUID. Your Account UUID found in your profile on the Dashboard. 
+
+
 ### Blacklist Domains
 List of domains  that you never want to send to Domain Tools
 

@@ -5,7 +5,7 @@ module.exports = {
    * @type String
    * @required
    */
-  name: 'Gigamon Insights',
+  name: 'Gigamon ThreatINSIGHT',
   /**
    * The acronym that appears in the notification window when information from this integration
    * is displayed.  Note that the acronym is included as part of each "tag" in the summary information
@@ -90,6 +90,15 @@ module.exports = {
       key: 'apiKey',
       name: 'Gigamon Token',
       description: 'Valid Gigamon Insights Token',
+      default: '',
+      type: 'password',
+      userCanEdit: true,
+      adminOnly: false
+    },
+    {
+      key: 'account_uuid',
+      name: 'Account UUID',
+      description: 'Your Account UUID found in your profile on the Dashboard',
       default: '',
       type: 'password',
       userCanEdit: true,

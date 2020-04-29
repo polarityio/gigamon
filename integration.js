@@ -2,6 +2,7 @@
 
 const request = require('request');
 const _ = require('lodash');
+const moment = require('moment');
 const config = require('./config/config');
 const async = require('async');
 const fs = require('fs');
@@ -56,6 +57,8 @@ function startup(logger) {
   requestWithDefaults = request.defaults(defaults);
 }
 
+
+
 function doLookup(entities, options, cb) {
   let lookupResults = [];
   let tasks = [];
@@ -69,24 +72,30 @@ function doLookup(entities, options, cb) {
       if (!_isInvalidEntity(entity) && !_isEntityBlacklisted(entity, options)) {
         //do the lookup
         let requestOptions = {
-          uri: `https://detections.icebrg.io/v1/detections?device_ip=${entity.value}`,
+          uri: `https://detections.icebrg.io/v1/detections`,
           method: 'GET',
           headers: {
             Authorization: 'IBToken ' + options.apiKey
+          },
+          qs: {
+            device_ip: entity.value,
+            sort_by: 'last_seen',
+            sort_order: 'desc',
+            include: 'rules',
+            account_uuid: options.account_uuid
           }
         };
 
         Logger.trace({ options: requestOptions }, 'Request URI');
 
-        tasks.push(function(done) {
-          requestWithDefaults(requestOptions, function(error, res, body) {
+        tasks.push(function (done) {
+          requestWithDefaults(requestOptions, function (error, res, body) {
             let processedResult = handleRestError(error, entity, res, body);
+            if (processedResult.error) return done(processedResult);
 
-            if (processedResult.error) {
-              done(processedResult);
-              return;
+            if (processedResult.body) {
+              processedResult = _formatBody(body, processedResult);
             }
-
             done(null, processedResult);
           });
         });
@@ -104,8 +113,8 @@ function doLookup(entities, options, cb) {
 
         Logger.trace({ options: requestOptions }, 'Request URI');
 
-        tasks.push(function(done) {
-          requestWithDefaults(requestOptions, function(error, res, body) {
+        tasks.push(function (done) {
+          requestWithDefaults(requestOptions, function (error, res, body) {
             let processedResult = handleRestError(error, entity, res, body);
 
             if (processedResult.error) {
@@ -138,7 +147,7 @@ function doLookup(entities, options, cb) {
           entity: result.entity,
           data: {
             summary: [],
-            details: { 
+            details: {
               ...result.body,
               link: `https://portal.icebrg.io/search?query=${result.entity.value}`
             }
@@ -150,6 +159,25 @@ function doLookup(entities, options, cb) {
     cb(null, lookupResults);
   });
 }
+
+const _formatBody = (body, processedResult) => ({
+  ...processedResult,
+  body: {
+    ...body,
+    detections: body.detections
+      .map(({ first_seen, last_seen, created, ...detection }) => ({
+        ...detection,
+        ...(detection.rule_uuid && {
+          name: (body.rules.find(({ uuid }) => uuid === detection.rule_uuid) || { name: null }).name
+        }),
+        first_seen: moment(first_seen).format('MMM D YY, h:mm A'),
+        last_seen: moment(last_seen).format('MMM D YY, h:mm A'),
+        created: moment(created).format('MMM D YY, h:mm A')
+      }))
+      .filter(({ name }) => !(name && name.toLowerCase().includes('train'))),
+    rules: body.rules.filter(({ name }) => !(name && name.toLowerCase().includes('train')))
+  }
+});
 
 function _setupRegexBlacklists(options) {
   if (options.domainBlacklistRegex !== previousDomainRegexAsString && options.domainBlacklistRegex.length === 0) {
@@ -178,7 +206,7 @@ function _setupRegexBlacklists(options) {
 }
 
 function doPDNSLookup(entity, options) {
-  return function(done) {
+  return function (done) {
     let requestOptions = {
       uri: `https://entity.icebrg.io/v1/entity/${entity.value}/pdns`,
       method: 'GET',
@@ -189,11 +217,7 @@ function doPDNSLookup(entity, options) {
 
     requestWithDefaults(requestOptions, (error, response, body) => {
       let processedResult = handleRestError(error, entity, response, body);
-
-      if (processedResult.error) {
-        done(processedResult);
-        return;
-      }
+      if (processedResult.error) return done(processedResult);
 
       done(null, processedResult.body);
     });
@@ -201,23 +225,19 @@ function doPDNSLookup(entity, options) {
 }
 
 function doDHCPLookup(entity, options) {
-  return function(done) {
+  return function (done) {
     if (entity.isIPv4) {
       let requestOptions = {
-        uri: `https://entity.icebrg.io/v1/entity/${entity.value}/dhcp`,
+        uri: `https://entity.icebrg.io/v2/entity/tracking/ip/${entity.value}`,
         method: 'GET',
         headers: {
           Authorization: 'IBToken ' + options.apiKey
         }
       };
-
+      
       requestWithDefaults(requestOptions, (error, response, body) => {
         let processedResult = handleRestError(error, entity, response, body);
-
-        if (processedResult.error) {
-          done(processedResult);
-          return;
-        }
+        if (processedResult.error) return done(processedResult);
         done(null, processedResult.body);
       });
     } else {
@@ -227,22 +247,19 @@ function doDHCPLookup(entity, options) {
 }
 
 function doSummaryLookup(entity, options) {
-  return function(done) {
+  return function (done) {
     let requestOptions = {
       uri: `https://entity.icebrg.io/v1/entity/${entity.value}/summary`,
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: 'IBToken ' + options.apiKey
       }
     };
 
     requestWithDefaults(requestOptions, (error, response, body) => {
       let processedResult = handleRestError(error, entity, response, body);
-
-      if (processedResult.error) {
-        done(processedResult);
-        return;
-      }
+      if (processedResult.error) return done(processedResult);
 
       done(null, processedResult.body);
     });
@@ -256,14 +273,28 @@ function onDetails(lookupObject, options, cb) {
       dhcp: doDHCPLookup(lookupObject.entity, options),
       summary: doSummaryLookup(lookupObject.entity, options)
     },
-    (err, results) => {
+    (err, { pdns, dhcp, summary }) => {
       if (err) {
         return cb(err);
       }
       //store the results into the details object so we can access them in our template
-      lookupObject.data.details.pdns = results.pdns;
-      lookupObject.data.details.dhcp = results.dhcp;
-      lookupObject.data.details.summary = results.summary;
+      lookupObject.data.details.pdns = pdns;
+      lookupObject.data.details.dhcp = dhcp.entity_tracking_response.dhcp_mac_ip_intervals.map(
+        ({ interval_start, interval_end, ...dhcp }) => ({
+          ...dhcp,
+          ...(interval_start && { interval_start: moment(interval_start).format('MMM D YY, h:mm A') }),
+          ...(interval_end && { interval_end: moment(interval_end).format('MMM D YY, h:mm A') })
+        })
+      );
+      lookupObject.data.details.summary = {
+        ...summary,
+        ...(summary.first_seen && { first_seen: moment(summary.first_seen).format('MMM D YY, h:mm A') }),
+        ...(summary.summary &&
+          summary.summary.first_seen && { first_seen: moment(summary.first_seen).format('MMM D YY, h:mm A') }),
+        ...(summary.last_seen && { last_seen: moment(summary.last_seen).format('MMM D YY, h:mm A') }),
+        ...(summary.summary &&
+          summary.summary.last_seen && { last_seen: moment(summary.last_seen).format('MMM D YY, h:mm A') })
+      };
 
       Logger.trace({ lookup: lookupObject.data }, 'Looking at the data after on details.');
 
