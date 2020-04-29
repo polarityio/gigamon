@@ -13,7 +13,7 @@ Gigamon API token. You can find your api token by navigating to your account.
 
 
 ### Gigamon Account UUID
-Account UUID. Your Account UUID found in your profile on the Dashboard. 
+Account UUID. Your Account UUID found in your profile on the Dashboard. Used to filter down detection results.
 
 
 ### Blacklist Domains

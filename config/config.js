@@ -98,7 +98,7 @@ module.exports = {
     {
       key: 'account_uuid',
       name: 'Account UUID',
-      description: 'Your Account UUID found in your profile on the Dashboard',
+      description: 'Your Account UUID found in your profile on the Dashboard. Used to filter down detection results.',
       default: '',
       type: 'password',
       userCanEdit: true,
