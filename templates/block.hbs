@@ -18,6 +18,11 @@
     </li>
     {{#if (eq block.entity.type "IPv4")}}
         <li class="nav-item">
+            <a {{action "changeTab" "rules"}} class="nav-link {{if (or (eq activeTab "rules")(not activeTab)) "active"}}" href="#">
+                Rules
+            </a>
+        </li>
+        <li class="nav-item">
             <a {{action "changeTab" "pdns"}} class="nav-link {{if block.isLoadingDetails "disabled"}} {{if (or (eq activeTab "pdns")(not activeTab)) "active"}}" href="#">
                 PDNS {{#if block.isLoadingDetails}}{{fa-icon "spinner-third" fixedWidth=true spin=true class="loading-icon"}}{{/if}}
             </a>
@@ -35,42 +40,113 @@
     {{/if}}
 </ul>
 
+{{#if (eq activeTab "rules")}}
+    {{#if details.rules.length}}
+        <h1 class="p-title">
+            {{fa-icon "bug" fixedWidth=true}} Detection Rules
+        </h1>
+        {{#each details.rules as | rule |}}
+            <div class="mb-2">
+                {{#if rule.name}}
+                    <div>
+                        <span class="p-key">Name: </span>
+                        <span class="p-value">{{rule.name}}</span>
+                    </div>
+                {{/if}}
+                {{#if rule.category}}
+                    <div>
+                        <span class="p-key">Category: </span>
+                        <span class="p-value">{{rule.category}}</span>
+                    </div>
+                {{/if}}
+                {{#if rule.severity}}
+                    <div>
+                        <span class="p-key">Severity: </span>
+                        <span class="p-value">{{rule.severity}}</span>
+                    </div>
+                {{/if}}
+                {{#if rule.confidence}}
+                    <div>
+                        <span class="p-key">Confidence: </span>
+                        <span class="p-value">{{rule.confidence}}</span>
+                    </div>
+                {{/if}}
+            </div>
+        {{/each}}
+    {{else}}
+        <div class="alert alert-info mt-2" role="alert">
+            No Rules Found
+        </div>
+    {{/if}}
+{{/if}}
+
 {{#if (eq activeTab "dhcp")}}
     {{#if block.isLoadingDetails}}
         <div class="alert alert-info" role="alert">
             DHCP Details are Loading
         </div>
-    {{/if}}
-
-    {{#if details.dhcp.dhcp}}
-        <h1 class="p-title">
-            {{fa-icon "bug" fixedWidth=true}}  DHCP Details
-        </h1>
-        {{#each details.dhcp.dhcp as |result|}}
-            <div class="mb-2">
-            </div>
-        {{/each}}
     {{else}}
-        <div class="alert alert-info mt-2" role="alert">
-            No DHCP Details Found
-        </div>
+        {{#if details.dhcp.length}}
+            <h1 class="p-title">
+                {{fa-icon "bug" fixedWidth=true}}  DHCP Details
+            </h1>
+            {{#each details.dhcp as | dhcp |}}
+                <div class="mb-2">
+                    {{#if dhcp.hostname}}
+                        <div>
+                            <span class="p-key">Hostname: </span>
+                            <span class="p-value">{{dhcp.hostname}}</span>
+                        </div>
+                    {{/if}}
+                    {{#if dhcp.account_code}}
+                        <div>
+                            <span class="p-key">Account Code: </span>
+                            <span class="p-value">{{dhcp.account_code}}</span>
+                        </div>
+                    {{/if}}
+                    {{#if dhcp.mac}}
+                        <div>
+                            <span class="p-key">Mac Address: </span>
+                            <span class="p-value">{{dhcp.mac}}</span>
+                        </div>
+                    {{/if}}
+                    {{#if dhcp.interval_start}}
+                        <div>
+                            <span class="p-key">Interval Start: </span>
+                            <span class="p-value">{{dhcp.interval_start}}</span>
+                        </div>
+                    {{/if}}
+                    {{#if dhcp.interval_end}}
+                        <div>
+                            <span class="p-key">Interval End: </span>
+                            <span class="p-value">{{dhcp.interval_end}}</span>
+                        </div>
+                    {{/if}}
+                </div>
+            {{/each}}
+        {{else}}
+            <div class="alert alert-info mt-2" role="alert">
+                No DHCP Details Found
+            </div>
+        {{/if}}
     {{/if}}
 {{/if}}
 
 {{#if (eq activeTab "detections")}}
-    {{#if block.isLoadingDetails}}
-        <div class="alert alert-info" role="alert">
-            Detection Information is Loading
-        </div>
-    {{/if}}
     {{#if details.detections}}
         <h1 class="p-title">
             {{fa-icon "brain" fixedWidth=true}} Detection Details
         </h1>
-        <div class="mb-2">
-            {{#each details.detections as | detect| }}
+        {{#each details.detections as | detect| }}
+            <div class="mb-2">
                 {{#if (gt index 0)}}
                     <hr>
+                {{/if}}
+                {{#if detect.name}}
+                    <div>
+                        <span class="p-key">Rule Name: </span>
+                        <span class="p-value">{{detect.name}}</span>
+                    </div>
                 {{/if}}
                 {{#if detect.status}}
                     <div>
@@ -108,8 +184,8 @@
                         <span class="p-value">{{detect.last_seen}}</span>
                     </div>
                 {{/if}}
-            {{/each}}
-        </div>
+            </div>
+        {{/each}}
     {{else}}
         <div class="alert alert-info mt-2" role="alert">
             No Detections Found
@@ -123,94 +199,101 @@
         <div class="alert alert-info" role="alert">
             Entity Summary Information is Loading
         </div>
-    {{/if}}
-    {{#if (and (and details.summary details.summary.summary) (or details.summary.summary.first_seen details.summary.summary.last_seen details.summary.summary.prevalence_count_internal details.summary.summary.tags))}}
-        <h1 class="p-title">
-            {{fa-icon "brain" fixedWidth=true}}  Entity Summary Details
-        </h1>
-        <div class="mb-2">
-            {{#if details.summary.summary.first_seen}}
-                <div>
-                    <span class="p-key">First Seen: </span>
-                    <span class="p-value">{{details.summary.summary.first_seen}}</span>
-                </div>
-            {{/if}}
-            {{#if details.summary.summary.last_seen}}
-                <div>
-                    <span class="p-key">Last Seen: </span>
-                    <span class="p-value">{{details.summary.summary.last_seen}}</span>
-                </div>
-            {{/if}}
-            {{#if details.summary.summary.prevalence_count_internal}}
-                <div>
-                    <span class="p-key">Prevelance Count: </span>
-                    <span class="p-value">{{details.summary.summary.prevalence_count_internal}}</span>
-                </div>
-            {{/if}}
-            {{#if details.summary.summary.tags}}
-                {{#each details.summary.summary.tags as | tag | }}
-                    <span class="tag">{{tag}}</span>
-                {{/each}}
-            {{/if}}
-        </div>
     {{else}}
-        <div class="alert alert-info mt-2" role="alert">
-            No Entity Summary Information Found
-        </div>
+        {{#if (and (and details.summary details.summary.summary) (or details.summary.summary.first_seen details.summary.summary.last_seen details.summary.summary.prevalence_count_internal details.summary.summary.tags))}}
+            <h1 class="p-title">
+                {{fa-icon "brain" fixedWidth=true}}  Entity Summary Details
+            </h1>
+            <div class="mb-2">
+                {{#if details.summary.summary.first_seen}}
+                    <div>
+                        <span class="p-key">First Seen: </span>
+                        <span class="p-value">{{details.summary.summary.first_seen}}</span>
+                    </div>
+                {{/if}}
+                {{#if details.summary.summary.last_seen}}
+                    <div>
+                        <span class="p-key">Last Seen: </span>
+                        <span class="p-value">{{details.summary.summary.last_seen}}</span>
+                    </div>
+                {{/if}}
+                {{#if details.summary.summary.prevalence_count_internal}}
+                    <div>
+                        <span class="p-key">Prevelance Count: </span>
+                        <span class="p-value">{{details.summary.summary.prevalence_count_internal}}</span>
+                    </div>
+                {{/if}}
+                {{#if details.summary.summary.tags}}
+                    {{#each details.summary.summary.tags as | tag | }}
+                        <span class="tag">{{tag}}</span>
+                    {{/each}}
+                {{/if}}
+            </div>
+        {{else}}
+            <div class="alert alert-info mt-2" role="alert">
+                No Entity Summary Information Found
+            </div>
+        {{/if}}
     {{/if}}
 {{/if}}
 
 
 
 {{#if (eq activeTab "pdns")}}
-    {{#if details.pdns.passivedns}}
-        {{#each details.pdns.passivedns as | pdns index | }}
-            {{#if (gt index 0)}}
-                <hr>
-            {{/if}}
-            <h1 class="p-title">
-                {{fa-icon "question" fixedWidth=true}}  Passive DNS Information
-            </h1>
-            {{#if pdns.first_seen}}
-                <div>
-                    <span class="p-key">First Seen: </span>
-                    <span class="p-value">{{pdns.first_seen}}</span>
-                </div>
-            {{/if}}
-            {{#if pdns.last_seen}}
-                <div>
-                    <span class="p-key">Last Seen: </span>
-                    <span class="p-value">{{pdns.last_seen}}</span>
-                </div>
-            {{/if}}
-            {{#if pdns.record_type}}
-                <div>
-                    <span class="p-key">Record Type: </span>
-                    <span class="p-value">{{pdns.record_type}}</span>
-                </div>
-            {{/if}}
-            {{#if pdns.resolved}}
-                <div>
-                    <span class="p-key">Resolved: </span>
-                    <span class="p-value">{{pdns.resolved}}</span>
-                </div>
-            {{/if}}
-            {{#if pdns.sensor_id}}
-                <div>
-                    <span class="p-key">Sensor ID: </span>
-                    <span class="p-value">{{pdns.sensor_id}}</span>
-                </div>
-            {{/if}}
-            {{#if pdns.source}}
-                <div>
-                    <span class="p-key">Source: </span>
-                    <span class="p-value">{{pdns.source}}</span>
-                </div>
-            {{/if}}
-        {{/each}}
-    {{else}}
-        <div class="alert alert-info mt-2" role="alert">
-            No Passive DNS Information Found
+    {{#if block.isLoadingDetails}}
+        <div class="alert alert-info" role="alert">
+            Passive DNS Information is Loading
         </div>
+    {{else}}
+        {{#if details.pdns.passivedns}}
+            {{#each details.pdns.passivedns as | pdns index | }}
+                {{#if (gt index 0)}}
+                    <hr>
+                {{/if}}
+                <h1 class="p-title">
+                    {{fa-icon "question" fixedWidth=true}}  Passive DNS Information
+                </h1>
+                {{#if pdns.first_seen}}
+                    <div>
+                        <span class="p-key">First Seen: </span>
+                        <span class="p-value">{{pdns.first_seen}}</span>
+                    </div>
+                {{/if}}
+                {{#if pdns.last_seen}}
+                    <div>
+                        <span class="p-key">Last Seen: </span>
+                        <span class="p-value">{{pdns.last_seen}}</span>
+                    </div>
+                {{/if}}
+                {{#if pdns.record_type}}
+                    <div>
+                        <span class="p-key">Record Type: </span>
+                        <span class="p-value">{{pdns.record_type}}</span>
+                    </div>
+                {{/if}}
+                {{#if pdns.resolved}}
+                    <div>
+                        <span class="p-key">Resolved: </span>
+                        <span class="p-value">{{pdns.resolved}}</span>
+                    </div>
+                {{/if}}
+                {{#if pdns.sensor_id}}
+                    <div>
+                        <span class="p-key">Sensor ID: </span>
+                        <span class="p-value">{{pdns.sensor_id}}</span>
+                    </div>
+                {{/if}}
+                {{#if pdns.source}}
+                    <div>
+                        <span class="p-key">Source: </span>
+                        <span class="p-value">{{pdns.source}}</span>
+                    </div>
+                {{/if}}
+            {{/each}}
+        {{else}}
+            <div class="alert alert-info mt-2" role="alert">
+                No Passive DNS Information Found
+            </div>
+        {{/if}}
     {{/if}}
 {{/if}}
