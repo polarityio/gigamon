@@ -1,4 +1,4 @@
-# Polarity Gigamon Insights Integration
+# Polarity Gigamon ThreatINSIGHT Integration
 
 The Polarity - Gigamon integration searches Gigamon for detection information as well as any associated DHCP, PDNS or Summary information.
 
