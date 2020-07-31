@@ -137,12 +137,18 @@ function doLookup(entities, options, cb) {
     }
 
     results.forEach((result) => {
+      Logger.trace({result:result.body}, "checking results");
       if (result.body === null || _isMiss(result.body)) {
         lookupResults.push({
           entity: result.entity,
           data: null
         });
-      } else {
+      } else if (options.detect === true && result.body.result_count === 0) {
+        lookupResults.push({
+          entity: result.entity,
+          data: null
+        });
+      }else {
         lookupResults.push({
           entity: result.entity,
           data: {

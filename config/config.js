@@ -76,7 +76,7 @@ module.exports = {
     rejectUnauthorized: true
   },
   logging: {
-    level: 'info' //trace, debug, info, warn, error, fatal
+    level: 'trace' //trace, debug, info, warn, error, fatal
   },
   /**
    * Options that are displayed to the user/admin in the Polarity integration user-interface.  Should be structured
@@ -101,6 +101,15 @@ module.exports = {
       description: 'Your Account UUID found in your profile on the Dashboard. Used to filter down detection results.',
       default: '',
       type: 'password',
+      userCanEdit: true,
+      adminOnly: false
+    },
+    {
+      key: 'detect',
+      name: 'Do not show detections when no results are found',
+      description: 'Show indicators when there are no detections.',
+      default: false,
+      type: 'boolean',
       userCanEdit: true,
       adminOnly: false
     },
