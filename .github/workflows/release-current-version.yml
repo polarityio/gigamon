@@ -23,8 +23,8 @@ jobs:
       run: |
         npm install &&
         cd .. && 
-        tar -c --exclude="../${{ github.event.repository.name }}/.git" --exclude="../${{ github.event.repository.name }}/.gitignore" --exclude="../${{ github.event.repository.name }}/.github" -zvf "${{ steps.package-version.outputs.current-version }}.tgz" "./${{ github.event.repository.name }}" &&  
-        echo "::set-output name=build_hash::$(sha256sum '${{ steps.package-version.outputs.current-version }}.tgz' | grep -oE '^[^ ]*' )" &&
+        tar -c --exclude="./${{ github.event.repository.name }}/.git" --exclude="./${{ github.event.repository.name }}/.gitignore" --exclude="./${{ github.event.repository.name }}/package-lock.json" --exclude="./${{ github.event.repository.name }}/.github" -zvf "${{ github.event.repository.name }}-${{ steps.package-version.outputs.current-version }}.tgz" "./${{ github.event.repository.name }}" &&  
+        echo "::set-output name=build_hash::$(sha256sum '${{ github.event.repository.name }}-${{ steps.package-version.outputs.current-version }}.tgz' | grep -oE '^[^ ]*' )" &&
         cd ${{ github.event.repository.name }}
     - name: Create Versioned Release
       id: create_versioned_release
@@ -45,7 +45,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_versioned_release.outputs.upload_url }} 
-        asset_path: ../${{ steps.package-version.outputs.current-version}}.tgz
-        asset_name: ${{ steps.package-version.outputs.current-version}}.tgz
+        asset_path: ../${{ github.event.repository.name }}-${{ steps.package-version.outputs.current-version}}.tgz
+        asset_name: ${{ github.event.repository.name }}-${{ steps.package-version.outputs.current-version}}.tgz
         asset_content_type: application/gzip
-        
