@@ -48,3 +48,4 @@ jobs:
         asset_path: ../${{ github.event.repository.name }}-${{ steps.package-version.outputs.current-version}}.tgz
         asset_name: ${{ github.event.repository.name }}-${{ steps.package-version.outputs.current-version}}.tgz
         asset_content_type: application/gzip
+        
