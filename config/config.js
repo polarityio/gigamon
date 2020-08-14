@@ -58,16 +58,16 @@ module.exports = {
   },
   request: {
     // Provide the path to your certFile. Leave an empty string to ignore this option.
-    // Relative paths are relative to the PassiveTotal integration's root directory
+    // Relative paths are relative to the Gigamon ThreatINSIGHT integration's root directory
     cert: '',
     // Provide the path to your private key. Leave an empty string to ignore this option.
-    // Relative paths are relative to the PassiveTotal integration's root directory
+    // Relative paths are relative to the Gigamon ThreatINSIGHT integration's root directory
     key: '',
     // Provide the key passphrase if required.  Leave an empty string to ignore this option.
-    // Relative paths are relative to the PassiveTotal integration's root directory
+    // Relative paths are relative to the Gigamon ThreatINSIGHT integration's root directory
     passphrase: '',
     // Provide the Certificate Authority. Leave an empty string to ignore this option.
-    // Relative paths are relative to the PassiveTotal integration's root directory
+    // Relative paths are relative to the Gigamon ThreatINSIGHT integration's root directory
     ca: '',
     // An HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for
     // the url parameter (by embedding the auth info in the uri)
@@ -105,28 +105,37 @@ module.exports = {
       adminOnly: false
     },
     {
-      key: 'blacklist',
-      name: 'Blacklist Domains and IPs',
-      description: 'List of domains and IPs that you never want to send to PassiveTotal',
+      key: 'detect',
+      name: 'Do not show detections when no results are found',
+      description: 'Show indicators when there are no detections.',
+      default: false,
+      type: 'boolean',
+      userCanEdit: true,
+      adminOnly: false
+    },
+    {
+      key: 'blocklist',
+      name: 'Ignore List',
+      description: 'List of domains and IPs that you never want to lookedup in Gigamon ThreatInsight',
       default: '',
       type: 'text',
       userCanEdit: false,
       adminOnly: false
     },
     {
-      key: 'domainBlacklistRegex',
-      name: 'Domain Black List Regex',
+      key: 'domainBlocklistRegex',
+      name: 'Ignore Domain Regex',
       description:
-        'Domains that match the given regex will not be looked up (if blank, no domains will be black listed)',
+        'Domains that match the given regex will not be looked up.',
       default: '',
       type: 'text',
       userCanEdit: false,
       adminOnly: false
     },
     {
-      key: 'ipBlacklistRegex',
-      name: 'IP Black List Regex',
-      description: 'IPs that match the given regex will not be looked up (if blank, no IPs will be black listed)',
+      key: 'ipBlocklistRegex',
+      name: 'Ignore IP Regex',
+      description: 'IPs that match the given regex will not be looked up.',
       default: '',
       type: 'text',
       userCanEdit: false,

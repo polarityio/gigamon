@@ -24,12 +24,14 @@ Gigamon API token. You can find your api token by navigating to your account.
 Account UUID. Your Account UUID found in your profile on the Dashboard. Used to filter down detection results.
 
 
-### Blacklist Domains
-List of domains  that you never want to send to Domain Tools
+### Ignore List
+List of domains  that you never want to sent to Gigamon ThreatINSIGHT.
 
-### Domain Blacklist Regex
-Domains that match the given regex will not be looked up (if blank, no domains will be black listed)
+### Ignore Domain Regex
+Domains that match the given regex will not be looked up.
 
+### Ignore IP Regex
+IPs that match the given regex will not be looked up.
 
 ## Installation Instructions
 
