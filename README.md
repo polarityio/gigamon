@@ -25,7 +25,7 @@ Account UUID. Your Account UUID found in your profile on the Dashboard. Used to 
 
 
 ### Ignore List
-List of domains  that you never want to sent to Gigamon ThreatINSIGHT.
+List of domains that you never want to send to Gigamon ThreatINSIGHT.
 
 ### Ignore Domain Regex
 Domains that match the given regex will not be looked up.
