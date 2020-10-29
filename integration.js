@@ -279,10 +279,13 @@ function onDetails(lookupObject, options, cb) {
       dhcp: doDHCPLookup(lookupObject.entity, options),
       summary: doSummaryLookup(lookupObject.entity, options)
     },
-    (err, { pdns, dhcp, summary }) => {
+    (err, result) => {
       if (err) {
         return cb(err);
       }
+
+      const { pdns, dhcp, summary } = result;
+      
       //store the results into the details object so we can access them in our template
       lookupObject.data.details.pdns = pdns;
       lookupObject.data.details.dhcp =

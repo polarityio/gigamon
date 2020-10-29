@@ -116,7 +116,7 @@ module.exports = {
     {
       key: 'blocklist',
       name: 'Ignore List',
-      description: 'List of domains and IPs that you never want to lookedup in Gigamon ThreatInsight',
+      description: 'List of domains and IPs that you never want to lookup in Gigamon ThreatInsight',
       default: '',
       type: 'text',
       userCanEdit: false,
