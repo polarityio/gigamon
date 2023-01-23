@@ -24,6 +24,7 @@ module.exports = {
    */
   description: 'Performs IP and domain lookups against Gigamon Insights Detection and Entity endpoints',
   entityTypes: ['IPv4', 'domain'],
+  defaultColor: 'light-pink',
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
    * the below files can be used in your custom template.
@@ -125,8 +126,7 @@ module.exports = {
     {
       key: 'domainBlocklistRegex',
       name: 'Ignore Domain Regex',
-      description:
-        'Domains that match the given regex will not be looked up.',
+      description: 'Domains that match the given regex will not be looked up.',
       default: '',
       type: 'text',
       userCanEdit: false,
