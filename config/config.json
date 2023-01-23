@@ -1,0 +1,91 @@
+{
+  "name": "Gigamon ThreatINSIGHT",
+  "acronym": "GIG",
+  "description": "Performs IP and domain lookups against Gigamon Insights Detection and Entity endpoints",
+  "entityTypes": ["IPv4", "domain"],
+  "defaultColor": "light-pink",
+  "styles": ["./styles/gig.less"],
+  "block": {
+    "component": {
+      "file": "./component/block.js"
+    },
+    "template": {
+      "file": "./templates/block.hbs"
+    }
+  },
+  "summary": {
+    "component": {
+      "file": "./component/summary.js"
+    },
+    "template": {
+      "file": "./templates/summary.hbs"
+    }
+  },
+  "request": {
+    "cert": "",
+    "key": "",
+    "passphrase": "",
+    "ca": "",
+    "proxy": "",
+    "rejectUnauthorized": true
+  },
+  "logging": {
+    "level": "info"
+  },
+  "options": [
+    {
+      "key": "apiKey",
+      "name": "Gigamon Token",
+      "description": "Valid Gigamon Insights Token",
+      "default": "",
+      "type": "password",
+      "userCanEdit": true,
+      "adminOnly": false
+    },
+    {
+      "key": "account_uuid",
+      "name": "Account UUID",
+      "description": "Your Account UUID found in your profile on the Dashboard. Used to filter down detection results.",
+      "default": "",
+      "type": "password",
+      "userCanEdit": true,
+      "adminOnly": false
+    },
+    {
+      "key": "detect",
+      "name": "Do not show detections when no results are found",
+      "description": "Show indicators when there are no detections.",
+      "default": false,
+      "type": "boolean",
+      "userCanEdit": true,
+      "adminOnly": false
+    },
+    {
+      "key": "blocklist",
+      "name": "Ignore List",
+      "description": "List of domains and IPs that you never want to lookup in Gigamon ThreatInsight",
+      "default": "",
+      "type": "text",
+      "userCanEdit": false,
+      "adminOnly": false
+    },
+    {
+      "key": "domainBlocklistRegex",
+      "name": "Ignore Domain Regex",
+      "description": "Domains that match the given regex will not be looked up.",
+      "default": "",
+      "type": "text",
+      "userCanEdit": false,
+      "adminOnly": false
+    },
+    {
+      "key": "ipBlocklistRegex",
+      "name": "Ignore IP Regex",
+      "description": "IPs that match the given regex will not be looked up.",
+      "default": "",
+      "type": "text",
+      "userCanEdit": false,
+      "adminOnly": false
+    }
+  ]
+}
