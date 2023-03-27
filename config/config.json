@@ -1,4 +1,5 @@
 {
+  "polarityIntegrationUuid": "d9f392c0-cce1-11ed-aeee-075d3490155d",
   "name": "Gigamon ThreatINSIGHT",
   "acronym": "GIG",
   "description": "Performs IP and domain lookups against Gigamon Insights Detection and Entity endpoints",
