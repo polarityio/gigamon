@@ -6,7 +6,7 @@
   "dependencies": {
     "async": "^3.2.4",
     "lodash": "^4.17.21",
-    "moment": "^2.29.4",
+    "moment": "^2.30.0",
     "postman-request": "^2.88.1-postman.31"
   }
 }
