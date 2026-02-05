@@ -1,0 +1,123 @@
+{
+  "result_count": 3,
+  "detections": [
+    {
+      "uuid": "det-123-abc-456",
+      "rule_uuid": "rule-789-def-012",
+      "name": "Malicious Command and Control Activity",
+      "status": "open",
+      "device_ip": "192.168.1.100",
+      "first_seen": "Jan 15 24, 2:30 PM",
+      "last_seen": "Jan 16 24, 8:45 AM",
+      "created": "Jan 15 24, 2:35 PM",
+      "resolution": null,
+      "resolution_comment": null,
+      "detection_confidence": 0.95,
+      "alert_severity": "high",
+      "account_uuid": "acc-999-xyz-888"
+    },
+    {
+      "uuid": "det-234-bcd-567",
+      "rule_uuid": "rule-890-efg-123",
+      "name": "Suspicious DNS Query Pattern",
+      "status": "closed",
+      "device_ip": "192.168.1.100",
+      "first_seen": "Jan 14 24, 10:15 AM",
+      "last_seen": "Jan 14 24, 11:30 AM",
+      "created": "Jan 14 24, 10:20 AM",
+      "resolution": "false_positive",
+      "resolution_comment": "Legitimate traffic from authorized application",
+      "detection_confidence": 0.78,
+      "alert_severity": "medium",
+      "account_uuid": "acc-999-xyz-888"
+    },
+    {
+      "uuid": "det-345-cde-678",
+      "rule_uuid": "rule-901-fgh-234",
+      "name": "Data Exfiltration Attempt",
+      "status": "investigating",
+      "device_ip": "192.168.1.100",
+      "first_seen": "Jan 16 24, 1:00 AM",
+      "last_seen": "Jan 16 24, 3:30 AM",
+      "created": "Jan 16 24, 1:05 AM",
+      "resolution": null,
+      "resolution_comment": null,
+      "detection_confidence": 0.89,
+      "alert_severity": "critical",
+      "account_uuid": "acc-999-xyz-888"
+    }
+  ],
+  "rules": [
+    {
+      "uuid": "rule-789-def-012",
+      "name": "Malicious Command and Control Activity",
+      "category": "command_and_control",
+      "severity": "high",
+      "confidence": "high",
+      "description": "Detects communication patterns consistent with C2 beaconing",
+      "created_at": "2023-08-15T14:30:00Z",
+      "updated_at": "2024-01-10T09:15:00Z",
+      "enabled": true,
+      "tags": ["c2", "malware", "network"]
+    },
+    {
+      "uuid": "rule-890-efg-123",
+      "name": "Suspicious DNS Query Pattern",
+      "category": "dns_abuse",
+      "severity": "medium",
+      "confidence": "medium",
+      "description": "Identifies unusual DNS query patterns that may indicate tunneling or DGA activity",
+      "created_at": "2023-09-22T11:45:00Z",
+      "updated_at": "2024-01-05T16:20:00Z",
+      "enabled": true,
+      "tags": ["dns", "tunneling", "dga"]
+    },
+    {
+      "uuid": "rule-901-fgh-234",
+      "name": "Data Exfiltration Attempt",
+      "category": "data_loss",
+      "severity": "critical",
+      "confidence": "high",
+      "description": "Detects large volumes of data being transferred to external destinations",
+      "created_at": "2023-07-10T08:00:00Z",
+      "updated_at": "2024-01-12T13:45:00Z",
+      "enabled": true,
+      "tags": ["exfiltration", "data_loss", "critical"]
+    }
+  ],
+  "link": "https://portal.icebrg.io/search?query=192.168.1.100",
+  "pdns": {
+    "passivedns": [
+      {
+        "first_seen": "2023-12-01T00:00:00Z",
+        "last_seen": "2024-01-15T23:59:59Z",
+        "record_type": "A",
+        "resolved": "malicious-domain.example.com",
+        "sensor_id": "sensor-001",
+        "source": "gigamon_sensor"
+      }
+    ]
+  },
+  "dhcp": [
+    {
+      "hostname": "workstation-101",
+      "account_code": "DEPT-IT-001",
+      "mac": "00:1A:2B:3C:4D:5E",
+      "interval_start": "Jan 10 24, 8:00 AM",
+      "interval_end": "Jan 16 24, 8:00 AM"
+    }
+  ],
+  "summary": {
+    "summary": {
+      "first_seen": "Dec 1 23, 12:00 AM",
+      "last_seen": "Jan 16 24, 3:30 AM",
+      "prevalence_count_internal": 45,
+      "tags": ["suspicious", "monitored", "high_risk"]
+    }
+  },
+  "metadata": {
+    "api_version": "v1",
+    "response_time_ms": 145,
+    "query_timestamp": "2024-01-16T08:45:00Z"
+  }
+}

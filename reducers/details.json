@@ -1,0 +1,36 @@
+{
+  "root": {
+    "path": "",
+    "on_null": "return_empty"
+  },
+  "pipeline": [
+    {
+      "op": "copy",
+      "from": "detections[].name",
+      "to": "reduced_results.detection_names"
+    },
+    {
+      "op": "copy",
+      "from": "detections[].status",
+      "to": "reduced_results.detection_statuses"
+    },
+    {
+      "op": "copy",
+      "from": "rules[].name",
+      "to": "reduced_results.rule_names"
+    },
+    {
+      "op": "copy",
+      "from": "rules[].severity",
+      "to": "reduced_results.rule_severities"
+    },
+    {
+      "op": "prune",
+      "strategy": "empty_values",
+      "target": "reduced_results"
+    }
+  ],
+  "output": {
+    "result": "$working.reduced_results"
+  }
+}

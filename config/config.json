@@ -3,9 +3,14 @@
   "name": "Gigamon ThreatINSIGHT",
   "acronym": "GIG",
   "description": "Performs IP and domain lookups against Gigamon Insights Detection and Entity endpoints",
-  "entityTypes": ["IPv4", "domain"],
+  "entityTypes": [
+    "IPv4",
+    "domain"
+  ],
   "defaultColor": "light-pink",
-  "styles": ["./styles/gig.less"],
+  "styles": [
+    "./styles/gig.less"
+  ],
   "block": {
     "component": {
       "file": "./component/block.js"
@@ -87,5 +92,10 @@
       "userCanEdit": false,
       "adminOnly": false
     }
-  ]
+  ],
+  "reducer": {
+    "details": {
+      "file": "./reducers/details.json"
+    }
+  }
 }
